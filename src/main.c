@@ -65,6 +65,10 @@ int main(int argc, char **argv)
     printf("%c", c);
     slow_sleep(opts.delay);
     fflush(stdout);
+    if (opts.jitter > 0) {
+      int amount = opts.jitter * slow_random();
+      slow_sleep(amount);
+    }
   }
   return 0;
 }

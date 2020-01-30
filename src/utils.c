@@ -12,3 +12,8 @@ void slow_sleep(int millis)
 
   nanosleep(&t1, &t2);
 }
+
+double slow_random()
+{
+  return drand48();
+}
