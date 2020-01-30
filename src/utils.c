@@ -2,7 +2,7 @@
 
 #define NANO_SECONDS 1000000
 
-void slow_sleep(double millis)
+void slow_sleep(int millis)
 {
   struct timespec t1 = {0};
   struct timespec t2 = {0};

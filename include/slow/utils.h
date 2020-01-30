@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-void slow_sleep(double millis);
+void slow_sleep(int millis);
 
 #ifdef __cplusplus
 }
