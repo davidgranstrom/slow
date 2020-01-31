@@ -1,25 +1,26 @@
 # slow
 
-A small command line utility that slows down text output.
+Like `cat`, but slower.
 
-## Building
+## Installation
 
 ```
 mkdir build && cd build
-cmake ..
+cmake .. -DCMAKE_BUILD_TYPE=Release
 make
+make install
 ```
 
 ## Usage
 
 ```
-usage: slow [-djl] [file]
+usage: slow [file] [-djlh]
 
 example: ls | slow
 
 options:
 -d --delay    [default 15] Delay time in milliseconds
 -j --jitter   [default 0] Apply random delay jitter
--l --lines    Display line by line output instead of char by char
+-l --line     Display line by line output instead of char by char
 -h --help     Show this help
 ```
