@@ -13,8 +13,8 @@ struct Options {
 static void print_usage()
 {
   printf(
-      "usage: slow [file] [-djlh]\n"
-      "example: ls | slow\n"
+      "usage: slow [file] [-djlh]\n\n"
+      "example: ls | slow\n\n"
       "options:\n"
       "-d --delay    [default 15] Delay time in milliseconds\n"
       "-j --jitter   [default 0] Apply random delay jitter\n"
