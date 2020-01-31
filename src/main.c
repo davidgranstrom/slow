@@ -127,6 +127,7 @@ int main(int argc, char **argv)
     }
   }
 
+  fclose(f);
   free(data);
   return EXIT_SUCCESS;
 }
