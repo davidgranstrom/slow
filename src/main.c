@@ -6,11 +6,10 @@
 #include "slow/io.h"
 #include "slow/utils.h"
 
-struct options {
+struct Options {
   int delay;
   int jitter;
   bool line_output;
-  bool help;
 };
 
 static void print_usage()
@@ -21,12 +20,12 @@ static void print_usage()
       "options:\n"
       "-d --delay    [default 15] Delay time in milliseconds\n"
       "-j --jitter   [default 0] Apply random delay jitter\n"
-      "-l --lines    Display line by line output instead of char by char\n"
+      "-l --line     Display line by line output instead of char by char\n"
       "-h --help     Show this help\n"
       );
 }
 
-static void parse_args(int argc, char **argv, struct options *opts)
+static void parse_args(int argc, char **argv, struct Options *opts)
 {
   if (argc > 1) {
     for (int i = 0; i < argc; i++) {
@@ -36,7 +35,7 @@ static void parse_args(int argc, char **argv, struct options *opts)
       if (strcmp(argv[i], "-j") == 0 || strcmp(argv[i], "--jitter") == 0) {
         opts->jitter = (int)strtol(argv[i + 1], (char **)NULL, 10);
       }
-      if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--lines") == 0) {
+      if (strcmp(argv[i], "-l") == 0 || strcmp(argv[i], "--line") == 0) {
         opts->line_output = true;
       }
       if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
@@ -66,7 +65,7 @@ static bool is_filename(char *s)
     return false;
   if (strcmp(s, "-j") == 0 || strcmp(s, "--jitter") == 0) 
     return false;
-  if (strcmp(s, "-l") == 0 || strcmp(s, "--lines") == 0) 
+  if (strcmp(s, "-l") == 0 || strcmp(s, "--line") == 0) 
     return false;
   if (strcmp(s, "-h") == 0 || strcmp(s, "--help") == 0) 
     return false;
@@ -75,7 +74,7 @@ static bool is_filename(char *s)
 
 int main(int argc, char **argv)
 {
-  struct options opts = {
+  struct Options opts = {
     .delay = 15,
     .jitter = 0,
     .line_output = false,
