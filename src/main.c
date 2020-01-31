@@ -41,9 +41,6 @@ static void parse_args(int argc, char **argv, struct Options *opts)
         exit(EXIT_SUCCESS);
       }
     }
-  } else {
-    print_usage();
-    exit(EXIT_FAILURE);
   }
 }
 
