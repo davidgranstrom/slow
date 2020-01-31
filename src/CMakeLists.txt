@@ -1,6 +1,5 @@
 set(source_files
   main.c
-  io.c
   utils.c
   )
 

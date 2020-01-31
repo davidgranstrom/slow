@@ -2,8 +2,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
-
-#include "slow/io.h"
 #include "slow/utils.h"
 
 struct Options {
