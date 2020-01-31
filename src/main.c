@@ -13,6 +13,19 @@ struct options {
   bool help;
 };
 
+static void print_usage()
+{
+  printf(
+      "usage: slow [file] [-djlh]\n"
+      "example: ls | slow\n"
+      "options:\n"
+      "-d --delay    [default 15] Delay time in milliseconds\n"
+      "-j --jitter   [default 0] Apply random delay jitter\n"
+      "-l --lines    Display line by line output instead of char by char\n"
+      "-h --help     Show this help\n"
+      );
+}
+
 static void parse_args(int argc, char **argv, struct options *opts)
 {
   if (argc > 1) {
@@ -27,19 +40,13 @@ static void parse_args(int argc, char **argv, struct options *opts)
         opts->line_output = true;
       }
       if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-        printf(
-            "usage: slow [-djl] [file]\n"
-            "example: ls | slow\n"
-            "options:\n"
-            "-d --delay    [default 15] Delay time in milliseconds\n"
-            "-j --jitter   [default 0] Apply random delay jitter\n"
-            "-l --lines    Display line by line output instead of char by char\n"
-            "-h --help     Show this help\n"
-            );
-        opts->help = true;
-        break; // no need to continue parsing args
+        print_usage();
+        exit(EXIT_SUCCESS);
       }
     }
+  } else {
+    print_usage();
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -53,25 +60,34 @@ static void delay(int d, int j)
   }
 }
 
+static bool is_filename(char *s)
+{
+  if (strcmp(s, "-d") == 0 || strcmp(s, "--delay") == 0) 
+    return false;
+  if (strcmp(s, "-j") == 0 || strcmp(s, "--jitter") == 0) 
+    return false;
+  if (strcmp(s, "-l") == 0 || strcmp(s, "--lines") == 0) 
+    return false;
+  if (strcmp(s, "-h") == 0 || strcmp(s, "--help") == 0) 
+    return false;
+  return true;
+}
+
 int main(int argc, char **argv)
 {
   struct options opts = {
     .delay = 15,
     .jitter = 0,
     .line_output = false,
-    .help = false,
   };
 
   parse_args(argc, argv, &opts);
 
-  if (opts.help)
-    exit(EXIT_SUCCESS);
-
   FILE *f = stdin;
   if (argc > 1) {
-    char *last_arg = argv[argc-1];
-    if (last_arg[0] != '-') {
-      f = fopen(last_arg, "rb");
+    char *first_arg = argv[1];
+    if (is_filename(first_arg)) {
+      f = fopen(first_arg, "rb");
       if (f == NULL)
         exit(EXIT_FAILURE);
     }
