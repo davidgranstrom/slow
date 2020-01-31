@@ -57,6 +57,15 @@ int main(int argc, char **argv)
   if (opts.help)
     return 0;
 
+
+  FILE *f = stdin;
+  if (argc > 1) {
+    if (strcmp(argv[argc - 1], "-") != 0) {
+      f = fopen(argv[argc - 1], "rb");
+      if (f == NULL)
+        return -1;
+    }
+  }
   char *data = NULL;
   size_t num_bytes = 0;
   int err = read_stream(stdin, &data, &num_bytes);
