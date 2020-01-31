@@ -43,6 +43,16 @@ static void parse_args(int argc, char **argv, struct options *opts)
   }
 }
 
+static void delay(int d, int j)
+{
+  slow_sleep(d);
+  fflush(stdout);
+  if (j > 0) {
+    int amount = j * slow_random();
+    slow_sleep(amount);
+  }
+}
+
 int main(int argc, char **argv)
 {
   struct options opts = {
@@ -55,29 +65,41 @@ int main(int argc, char **argv)
   parse_args(argc, argv, &opts);
 
   if (opts.help)
-    return 0;
-
+    exit(EXIT_SUCCESS);
 
   FILE *f = stdin;
   if (argc > 1) {
-    if (strcmp(argv[argc - 1], "-") != 0) {
-      f = fopen(argv[argc - 1], "rb");
+    char *last_arg = argv[argc-1];
+    if (last_arg[0] != '-') {
+      f = fopen(last_arg, "rb");
       if (f == NULL)
-        return -1;
+        exit(EXIT_FAILURE);
     }
   }
+
   char *data = NULL;
-  size_t num_bytes = 0;
-  int err = read_stream(stdin, &data, &num_bytes);
-  char c = 0;
-  while ((c = *data++) != '\0') {
-    printf("%c", c);
-    slow_sleep(opts.delay);
-    fflush(stdout);
-    if (opts.jitter > 0) {
-      int amount = opts.jitter * slow_random();
-      slow_sleep(amount);
+  size_t nread = 0;
+  int err = read_stream(f, &data, &nread);
+  if (err != 0)
+    exit(EXIT_FAILURE);
+
+  if (!opts.line_output) {
+    char c = 0;
+    for (size_t i = 0; i < nread; i++) {
+      printf("%c", data[i]);
+      delay(opts.delay, opts.jitter);
+    }
+  } else {
+    char *token = NULL;
+    while ((token = strsep(&data, "\n\r")) != NULL) {
+      printf("%s\n", token);
+      delay(opts.delay, opts.jitter);
     }
   }
-  return 0;
+
+  // clean up
+  fclose(f);
+  free(data);
+
+  return EXIT_SUCCESS;
 }
