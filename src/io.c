@@ -31,7 +31,6 @@ int read_stream(FILE *f, char **data, size_t *size)
         }
     } else
         ret = errno;
-    fclose(f);
     if (ret) {
         free(buf);
         return ret;

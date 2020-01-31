@@ -80,8 +80,10 @@ int main(int argc, char **argv)
   char *data = NULL;
   size_t nread = 0;
   int err = read_stream(f, &data, &nread);
-  if (err != 0)
+  if (err != 0) {
+    fclose(f);
     exit(EXIT_FAILURE);
+  }
 
   if (!opts.line_output) {
     char c = 0;
@@ -97,9 +99,6 @@ int main(int argc, char **argv)
     }
   }
 
-  // clean up
-  fclose(f);
   free(data);
-
   return EXIT_SUCCESS;
 }
