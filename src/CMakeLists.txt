@@ -4,3 +4,7 @@ set(source_files
   )
 
 add_executable(slow ${source_files})
+install(
+  TARGETS slow
+  RUNTIME DESTINATION bin
+  )
